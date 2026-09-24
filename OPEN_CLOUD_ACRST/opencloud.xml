@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenCLOUD>
+    <!-- 
+        This XML file is for configuring the Google Drive folders for each tenant letter.
+        Each tenant gets its own isolated folder, ensuring that when you refresh one letter,
+        it does absolutely nothing to the other letters.
+    -->
+    <Tenants>
+        <Tenant letter="T">
+            <Name>BOP Festgroup (T)</Name>
+            <FolderId>1BG5QSIp3ezYg9XcwENCMosGIhsfuHqn3</FolderId>
+            <DriveLink>https://drive.google.com/drive/folders/1BG5QSIp3ezYg9XcwENCMosGIhsfuHqn3</DriveLink>
+            <Logo>https://bop-t.vr2.in/T.png</Logo>
+            <ThemeColor>#075ba6</ThemeColor>
+        </Tenant>
+        
+        <Tenant letter="A">
+            <Name>BOP Festgroup (A)</Name>
+            <FolderId>1lc5QhadXCSjBgxfr2re0sReO-7_wfmi3</FolderId>
+            <DriveLink>https://drive.google.com/drive/folders/1lc5QhadXCSjBgxfr2re0sReO-7_wfmi3</DriveLink>
+            <Logo>https://bop-a.vr2.in/A.png</Logo>
+            <ThemeColor>#0755a8</ThemeColor>
+        </Tenant>
+
+        <Tenant letter="S">
+            <Name>BOP Festgroup (S)</Name>
+            <FolderId>1qDDDuFXKEM2KHFo8qUSYI9U7bcqsEOBx</FolderId>
+            <DriveLink>https://drive.google.com/drive/folders/1qDDDuFXKEM2KHFo8qUSYI9U7bcqsEOBx</DriveLink>
+            <Logo>https://bop-a.vr2.in/S.png</Logo>
+            <ThemeColor>#4f8f64</ThemeColor>
+        </Tenant>
+
+        <Tenant letter="C">
+            <Name>BOP Beta (C)</Name>
+            <FolderId>1e3yR12IolOuyZeF_KvHCIeC9ibtR7QiB</FolderId>
+            <DriveLink>https://drive.google.com/drive/folders/1e3yR12IolOuyZeF_KvHCIeC9ibtR7QiB</DriveLink>
+            <Logo>https://bop-beta.vr2.in/C.png</Logo>
+            <ThemeColor>#7b3fa0</ThemeColor>
+        </Tenant>
+
+        <Tenant letter="R">
+            <Name>BOP Beta (R)</Name>
+            <FolderId>1pH_GiyBktRscz_xTtQ137a0V68kTEWky</FolderId>
+            <DriveLink>https://drive.google.com/drive/folders/1pH_GiyBktRscz_xTtQ137a0V68kTEWky</DriveLink>
+            <Logo>https://bop-beta.vr2.in/R.png</Logo>
+            <ThemeColor>#d4500a</ThemeColor>
+        </Tenant>
+    </Tenants>
+</OpenCLOUD>

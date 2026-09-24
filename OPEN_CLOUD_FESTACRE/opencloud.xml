@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenCLOUD>
+    <!-- 
+        This XML file is for configuring the Google Drive folders for each tenant.
+    -->
+    <Tenants>
+        <Tenant letter="10">
+            <Name>OpenCloud DEYE (10)</Name>
+            <FolderId>1NTIxhbjL3Yob45-823u039tGHbs_pRay</FolderId>
+            <DriveLink>https://drive.google.com/drive/folders/1NTIxhbjL3Yob45-823u039tGHbs_pRay</DriveLink>
+            <Logo>https://www.energy-stock.com/vr2.png</Logo>
+            <ThemeColor>#075ba6</ThemeColor>
+        </Tenant>
+        
+        <Tenant letter="11">
+            <Name>OpenCloud SIEGER (11)</Name>
+            <FolderId>11pyipwOkWx2n6B8XMIqUBLeX1lF1tp-O</FolderId>
+            <DriveLink>https://drive.google.com/drive/folders/11pyipwOkWx2n6B8XMIqUBLeX1lF1tp-O</DriveLink>
+            <Logo>https://www.energy-stock.com/vr2.png</Logo>
+            <ThemeColor>#075ba6</ThemeColor>
+        </Tenant>
+
+        <Tenant letter="12">
+            <Name>OpenCloud FoxESS (12)</Name>
+            <FolderId>1GnPCJbgM_8z5IaYWsWYtcH_GT2GDI1Bh</FolderId>
+            <DriveLink>https://drive.google.com/drive/folders/1GnPCJbgM_8z5IaYWsWYtcH_GT2GDI1Bh</DriveLink>
+            <Logo>https://www.energy-stock.com/vr2.png</Logo>
+            <ThemeColor>#075ba6</ThemeColor>
+        </Tenant>
+
+        <Tenant letter="13">
+            <Name>OpenCloud Feston OEM (13)</Name>
+            <FolderId>1d4ov3PkqLitC1UtVyyzqAz_2jvRyZLxz</FolderId>
+            <DriveLink>https://drive.google.com/drive/folders/1d4ov3PkqLitC1UtVyyzqAz_2jvRyZLxz</DriveLink>
+            <Logo>https://www.energy-stock.com/vr2.png</Logo>
+            <ThemeColor>#075ba6</ThemeColor>
+        </Tenant>
+    </Tenants>
+</OpenCLOUD>
