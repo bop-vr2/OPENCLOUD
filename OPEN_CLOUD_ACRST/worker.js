@@ -1,6 +1,6 @@
 export default {
   async fetch(request, env, ctx) {
-    const API_URL = "https://script.google.com/macros/s/AKfycbxvD2EZ-qUVMdyQP__N7JXBZBtjW7yA6A9rNMeq6yqrXQRpmcriX4B6ot4GoCfEm7SJ2g/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyehPQFeTD0JvFGaHgOfA62NYEI42Rp31eLFHv_sRClRz2BuqyG2vHEzS1T3QGYw4-t0w/exec";
     const url = new URL(request.url);
 
     if (url.pathname.startsWith("/download")) {
@@ -284,6 +284,7 @@ export default {
     .item:active { transform: scale(0.96); }
     .icon { width: 50px; height: 50px; margin-bottom: 8px; background-size: contain; background-repeat: no-repeat; background-position: center; flex-shrink: 0; }
     .folder-icon { background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/59/OneDrive_Folder_Icon.svg'); }
+    .folder-locked-icon { background-image: url('https://cdn-icons-png.flaticon.com/512/2580/2580558.png'); }
     .icon-pdf    { background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg'); }
     .icon-sheet  { background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/30/Google_Sheets_logo_%282014-2020%29.svg'); }
     .icon-word   { background-image: url('https://upload.wikimedia.org/wikipedia/commons/f/fb/Microsoft_Office_Word_%282013%E2%80%932019%29.svg'); }
@@ -307,6 +308,13 @@ export default {
     .sync-num { font-size: 26px; font-weight: 900; color: var(--primary); line-height: 1; }
     .sync-label { font-size: 15px; font-weight: 700; color: #333; }
     .sync-sub   { font-size: 12px; color: #999; margin-top: -6px; }
+    /* Force-sync full-page overlay */
+    .force-sync-overlay { position: fixed; inset: 0; z-index: 500; background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; animation: fadeIn 0.3s ease; }
+    .fs-ring-wrap { width: 110px; height: 110px; position: relative; display: flex; align-items: center; justify-content: center; }
+    .fs-ring { position: absolute; inset: 0; border-radius: 50%; border: 5px solid #eef2f7; border-top-color: var(--primary); animation: spin 0.9s linear infinite; }
+    .fs-num { font-size: 28px; font-weight: 900; color: var(--primary); line-height: 1; }
+    .fs-label { font-size: 17px; font-weight: 800; color: #333; }
+    .fs-sub { font-size: 13px; color: #999; font-weight: 500; }
     @keyframes spin   { to { transform: rotate(360deg); } }
     @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
     @keyframes pulse  { 0%{opacity:1} 50%{opacity:0.5} 100%{opacity:1} }
@@ -377,6 +385,28 @@ export default {
     #viewer-embed-phase { flex: 1; display: none; flex-direction: column; }
     #viewer-embed-phase.visible { display: flex; }
     #viewer-embed-phase embed, #viewer-embed-phase iframe { flex: 1; width: 100%; border: none; }
+    /* ── Password Gate Modal ── */
+    #password-gate { display: none; position: fixed; inset: 0; z-index: 9999; background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 50%, #0d1f3c 100%); align-items: center; justify-content: center; }
+    #password-gate.active { display: flex; }
+    .pw-card { background: rgba(255,255,255,0.06); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 48px 40px; max-width: 400px; width: 92%; text-align: center; box-shadow: 0 24px 80px rgba(0,0,0,0.4); animation: pw-slide-in 0.5s cubic-bezier(0.32,1,0.38,1); }
+    @keyframes pw-slide-in { from { opacity: 0; transform: translateY(30px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .pw-lock-icon { font-size: 56px; margin-bottom: 16px; animation: pw-float 3s ease-in-out infinite; }
+    @keyframes pw-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .pw-title { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 6px; letter-spacing: -0.3px; }
+    .pw-subtitle { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 28px; font-weight: 500; }
+    .pw-input-wrap { position: relative; margin-bottom: 16px; }
+    .pw-input-wrap input { width: 100%; padding: 14px 48px 14px 18px; border: 2px solid rgba(255,255,255,0.12); border-radius: 14px; background: rgba(255,255,255,0.07); color: #fff; font-size: 16px; font-weight: 600; letter-spacing: 3px; text-align: center; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .pw-input-wrap input::placeholder { color: rgba(255,255,255,0.25); letter-spacing: 1px; font-weight: 500; }
+    .pw-input-wrap input:focus { border-color: rgba(255,255,255,0.35); box-shadow: 0 0 0 4px rgba(255,255,255,0.06); }
+    .pw-input-wrap .pw-toggle-vis { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.4); font-size: 18px; cursor: pointer; padding: 4px; }
+    .pw-input-wrap .pw-toggle-vis:hover { color: rgba(255,255,255,0.7); }
+    .pw-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, #1a7a3a, #22a548); color: #fff; font-size: 15px; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; letter-spacing: 0.3px; }
+    .pw-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(26,122,58,0.4); }
+    .pw-submit:active { transform: scale(0.97); }
+    .pw-error { color: #ff6b6b; font-size: 12px; font-weight: 600; margin-top: 12px; min-height: 18px; transition: opacity 0.2s; }
+    .pw-error.shake { animation: pw-shake 0.4s ease; }
+    @keyframes pw-shake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-8px); } 40%,80% { transform: translateX(8px); } }
+    .pw-attempts { font-size: 11px; color: rgba(255,255,255,0.25); margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -410,7 +440,7 @@ export default {
     <span class="sep">&bull;</span>
     <span>&copy; 2026 <a href="mailto:bop@vr2.in">bop@vr2.in</a></span>
     <span class="sep">&bull;</span>
-    <span>v1.4</span>
+    <span>v1.5</span>
   </div>
 </div>
 
@@ -464,6 +494,23 @@ export default {
   </div>
 </div>
 
+<!-- ════ FOLDER PASSWORD POPUP ════ -->
+<div id="password-gate">
+  <div class="pw-card">
+    <div class="pw-lock-icon">🔐</div>
+    <div class="pw-title">Protected Folder</div>
+    <div class="pw-subtitle" id="pw-folder-name">Enter the access password to continue</div>
+    <div class="pw-input-wrap">
+      <input type="password" id="pw-input" placeholder="Enter password" autocomplete="off" />
+      <button class="pw-toggle-vis" id="pw-toggle" onclick="togglePwVis()">👁</button>
+    </div>
+    <button class="pw-submit" id="pw-submit" onclick="submitPassword()">Unlock Access</button>
+    <div class="pw-error" id="pw-error"></div>
+    <div class="pw-attempts" id="pw-attempts"></div>
+    <button onclick="closePwGate()" style="margin-top:14px;background:none;border:none;color:rgba(255,255,255,0.35);font-size:12px;cursor:pointer;font-weight:600;">Cancel</button>
+  </div>
+</div>
+
 <script>
   let memoryCache = {};
   let TREE = null, TREE_BRAND = null, currentView;
@@ -474,6 +521,12 @@ export default {
 
   const params = new URLSearchParams(window.location.search);
   const tenant = params.get("OpenCLOUD") || "T";
+
+  /* ── Per-folder password tracking ── */
+  const _unlockedFolders = new Set();
+  let _pendingFolderId = null;
+  let _pwAttempts = 0;
+  const MAX_PW_ATTEMPTS = 5;
 
   const storage = {
     get: (k) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch(e) { return memoryCache[k] || null; } },
@@ -831,6 +884,7 @@ export default {
   }
 
   function renderNode(node, path) {
+    /* Determine icon per folder based on its own protected flag */
     if (!TREE_BRAND) return;
     document.getElementById("logo").src = TREE_BRAND.logo;
     document.getElementById("tenant-name").innerText = tenant;
@@ -846,13 +900,13 @@ export default {
     if (currentView === 'list') {
       fl.className = 'list';
       let html = "";
-      node.folders.forEach(f => { html += '<div class="list-item" onclick="navigate(\\'' + f.id + '\\')">' + '<div class="icon folder-icon"></div><div class="name">' + f.name + '</div><span class="arrow">&#8250;</span></div>'; });
+      node.folders.forEach(f => { html += '<div class="list-item" onclick="navigate(\\'' + f.id + '\\')">' + '<div class="icon ' + (f.protected ? 'folder-locked-icon' : 'folder-icon') + '"></div><div class="name">' + f.name + '</div><span class="arrow">&#8250;</span></div>'; });
       node.files.forEach(f => { html += '<div class="list-item" onclick="openViewer(\\'' + f.id + '\\',\\'' + f.name.replace(/'/g,"\\'") + '\\',\\'' + (f.size||'') + '\\',\\'' + tenant + '\\')">' + '<div class="icon ' + getIcon(f.mime, f.name) + '"></div><div class="name">' + f.name + '</div><span class="size-badge">' + (f.size || '') + '</span><span class="arrow">&#8250;</span></div>'; });
       fl.innerHTML = html || '<div style="text-align:center;padding:40px;color:#999;">Empty folder</div>';
     } else {
       fl.className = 'grid';
       let html = "";
-      node.folders.forEach(f => { html += '<div class="item" onclick="navigate(\\'' + f.id + '\\')">' + '<div class="icon folder-icon"></div><div class="name">' + f.name + '</div></div>'; });
+      node.folders.forEach(f => { html += '<div class="item" onclick="navigate(\\'' + f.id + '\\')">' + '<div class="icon ' + (f.protected ? 'folder-locked-icon' : 'folder-icon') + '"></div><div class="name">' + f.name + '</div></div>'; });
       node.files.forEach(f => { html += '<div class="item" onclick="openViewer(\\'' + f.id + '\\',\\'' + f.name.replace(/'/g,"\\'") + '\\',\\'' + (f.size||'') + '\\',\\'' + tenant + '\\')">' + '<div class="icon ' + getIcon(f.mime, f.name) + '"></div><div class="name">' + f.name + '</div><div class="file-size">' + (f.size || '') + '</div></div>'; });
       fl.innerHTML = html || '<div style="text-align:center;padding:40px;color:#999;">Empty folder</div>';
     }
@@ -862,7 +916,25 @@ export default {
     if (!TREE) return;
     const node = findNode(TREE, folderId);
     if (!node) return;
-    _currentFolderId = folderId; // track current folder
+
+    /* ── Check if this folder is protected and not yet unlocked ── */
+    if (node.protected && !_unlockedFolders.has(folderId)) {
+      _pendingFolderId = folderId;
+      _pwAttempts = 0;
+      const gate = document.getElementById('password-gate');
+      document.getElementById('pw-folder-name').textContent = '\ud83d\udcc1 ' + node.name;
+      document.getElementById('pw-input').value = '';
+      document.getElementById('pw-error').textContent = '';
+      document.getElementById('pw-attempts').textContent = '';
+      document.getElementById('pw-submit').disabled = false;
+      document.getElementById('pw-submit').style.opacity = '1';
+      document.getElementById('pw-input').disabled = false;
+      gate.classList.add('active');
+      setTimeout(() => document.getElementById('pw-input').focus(), 100);
+      return;
+    }
+
+    _currentFolderId = folderId;
     const path = buildPath(TREE, folderId) || [{ id: TREE.id, name: TREE.name }];
     window.history.pushState({ fid: folderId }, "", '?OpenCLOUD=' + tenant + '&folderId=' + folderId);
     renderNode(node, path);
@@ -961,17 +1033,48 @@ export default {
     if (syncSvg) syncSvg.style.animation = 'spin 0.8s linear infinite';
 
     const treeCacheKey = 'tree_' + tenant, treeTsKey = 'tree_ts_' + tenant;
-    const statsEl = document.getElementById('stats-summary');
-    const origStats = statsEl ? statsEl.innerHTML : '';
-    if (statsEl) statsEl.innerHTML = 'Syncing... <span id="sync-secs">210</span>s';
 
-    let s = 210;
-    const intv = setInterval(() => {
-      s--;
-      const el = document.getElementById('sync-secs');
-      if (el) el.innerText = s > 0 ? s : 'Wait..';
-      else clearInterval(intv);
+    /* ── Show full-page blurred sync overlay ── */
+    const fsOverlay = document.createElement('div');
+    fsOverlay.className = 'force-sync-overlay'; fsOverlay.id = 'fs-overlay';
+    let fsSecs = 210;
+    fsOverlay.innerHTML = '<div class="fs-ring-wrap"><div class="fs-ring"></div><span class="fs-num" id="fs-num">' + fsSecs + '</span></div><div class="fs-label">Syncing with Google Drive\u2026</div><div class="fs-sub" id="fs-sub">Rebuilding file index from server</div>';
+    document.body.appendChild(fsOverlay);
+    document.querySelector('.container').style.filter = 'blur(6px)';
+    document.querySelector('.container').style.pointerEvents = 'none';
+
+    const fsIntv = setInterval(() => {
+      fsSecs--;
+      const el = document.getElementById('fs-num');
+      const sub = document.getElementById('fs-sub');
+      if (el) el.textContent = fsSecs > 0 ? fsSecs : '...';
+      if (sub && fsSecs <= 10) sub.textContent = 'Almost done\u2026';
+      else if (sub && fsSecs <= 60) sub.textContent = 'Building file tree\u2026';
+      if (fsSecs <= 0) clearInterval(fsIntv);
     }, 1000);
+
+    function removeFsOverlay() {
+      clearInterval(fsIntv);
+      const o = document.getElementById('fs-overlay');
+      if (o) {
+        const numEl = document.getElementById('fs-num');
+        if (numEl) { numEl.textContent = '\u2713'; numEl.style.color = '#2e7d32'; }
+        const subEl = document.getElementById('fs-sub');
+        if (subEl) subEl.textContent = 'Sync complete!';
+        setTimeout(() => {
+          o.style.transition = 'opacity 0.4s ease';
+          o.style.opacity = '0';
+          setTimeout(() => {
+            o.remove();
+            document.querySelector('.container').style.filter = '';
+            document.querySelector('.container').style.pointerEvents = '';
+          }, 420);
+        }, 500);
+      } else {
+        document.querySelector('.container').style.filter = '';
+        document.querySelector('.container').style.pointerEvents = '';
+      }
+    }
 
     try {
       const startTime = Date.now();
@@ -981,9 +1084,6 @@ export default {
         const res = await fetch('/api?action=tree&OpenCLOUD=' + tenant + '&rebuild=true');
         newData = await res.json();
       } catch (timeoutErr) {
-        // Cloudflare timed out, but Google Apps Script is still building it in the background!
-        // We will poll every 6 seconds to check if the cache file is updated.
-        // Google Apps Script can take up to 6 minutes (360s) for huge folders.
         for (let i = 0; i < 60; i++) {
           await new Promise(r => setTimeout(r, 6000));
           try {
@@ -997,28 +1097,88 @@ export default {
         }
       }
 
-      clearInterval(intv);
       if (newData && newData.success && newData.tree) {
         TREE = newData.tree; TREE_BRAND = newData.brand;
         storage.set(treeCacheKey, newData); storage.set(treeTsKey, Date.now());
-        // Re-render the folder the user is currently viewing
         const f = _currentFolderId || TREE.id;
         const n = findNode(TREE, f) || TREE;
         const p = buildPath(TREE, f) || [{ id: TREE.id, name: TREE.name }];
-        renderNode(n, p);
+        removeFsOverlay();
+        setTimeout(() => renderNode(n, p), 500);
       } else {
-        if (statsEl) statsEl.innerHTML = origStats;
-        alert('Sync timed out. Tenant T has too many files. Please rely on the 4-hour background cron job instead.');
+        removeFsOverlay();
+        setTimeout(() => alert('Sync timed out. Please try again later.'), 600);
       }
     } catch(e) {
-      clearInterval(intv);
-      if (statsEl) statsEl.innerHTML = origStats;
-      alert('Network error during sync.');
+      removeFsOverlay();
+      setTimeout(() => alert('Network error during sync.'), 600);
     }
 
     if (btn) { btn.style.opacity = '1'; btn.style.pointerEvents = 'auto'; }
     if (syncSvg) syncSvg.style.animation = '';
   }
+
+  /* ── Password popup logic ── */
+  function togglePwVis() {
+    const inp = document.getElementById('pw-input');
+    const btn = document.getElementById('pw-toggle');
+    if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '\ud83d\udd12'; }
+    else { inp.type = 'password'; btn.textContent = '\ud83d\udc41'; }
+  }
+
+  function closePwGate() {
+    _pendingFolderId = null;
+    document.getElementById('password-gate').classList.remove('active');
+  }
+
+  function submitPassword() {
+    const inp = document.getElementById('pw-input');
+    const errEl = document.getElementById('pw-error');
+    const attEl = document.getElementById('pw-attempts');
+    const submitBtn = document.getElementById('pw-submit');
+    const val = inp.value.trim();
+
+    if (!val) { errEl.textContent = 'Please enter a password'; return; }
+    if (!_pendingFolderId || !TREE) return;
+
+    _pwAttempts++;
+    if (_pwAttempts >= MAX_PW_ATTEMPTS) {
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.4';
+      inp.disabled = true;
+      errEl.textContent = 'Too many attempts. Close and try again.';
+      return;
+    }
+
+    const node = findNode(TREE, _pendingFolderId);
+    if (node && node.password && val === node.password) {
+      _unlockedFolders.add(_pendingFolderId);
+      errEl.textContent = '';
+      const gate = document.getElementById('password-gate');
+      gate.style.transition = 'opacity 0.35s ease';
+      gate.style.opacity = '0';
+      const fid = _pendingFolderId;
+      _pendingFolderId = null;
+      setTimeout(() => {
+        gate.classList.remove('active');
+        gate.style.opacity = '';
+        gate.style.transition = '';
+        navigate(fid);
+      }, 380);
+    } else {
+      errEl.textContent = 'Incorrect password. Please try again.';
+      errEl.classList.remove('shake');
+      void errEl.offsetWidth;
+      errEl.classList.add('shake');
+      attEl.textContent = _pwAttempts + ' of ' + MAX_PW_ATTEMPTS + ' attempts used';
+      inp.value = '';
+      inp.focus();
+    }
+  }
+
+  document.getElementById('pw-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') submitPassword();
+  });
 
   boot();
 </script>

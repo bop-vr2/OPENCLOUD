@@ -4,7 +4,8 @@ const FOLDERS = {
   'A': '1lc5QhadXCSjBgxfr2re0sReO-7_wfmi3',
   'S': '1qDDDuFXKEM2KHFo8qUSYI9U7bcqsEOBx',
   'C': '1e3yR12IolOuyZeF_KvHCIeC9ibtR7QiB',
-  'R': '1pH_GiyBktRscz_xTtQ137a0V68kTEWky'
+  'R': '1pH_GiyBktRscz_xTtQ137a0V68kTEWky',
+  'Z': '1lgqRt1M7cQmwbqTnarAZ6xuukUvYVvRt'
 };
 
 const TENANT_CONFIG = {
@@ -12,7 +13,8 @@ const TENANT_CONFIG = {
   'A': { logo: 'https://bop-a.vr2.in/A.png', color: '#0755a8' },
   'S': { logo: 'https://bop-a.vr2.in/S.png', color: '#4f8f64' },
   'C': { logo: 'https://bop-beta.vr2.in/C.png', color: '#7b3fa0' },
-  'R': { logo: 'https://bop-beta.vr2.in/R.png', color: '#d4500a' }
+  'R': { logo: 'https://bop-beta.vr2.in/R.png', color: '#d4500a' },
+  'Z': { logo: 'https://www.energy-stock.com/vr2.png', color: '#1a7a3a' }
 };
 
 function doGet(e) {
@@ -230,9 +232,21 @@ function updateTenantCache(tenant) {
     const fiIter = folder.getFiles();
     while (fiIter.hasNext()) {
       const f = fiIter.next();
-      if (f.getName() !== fileName) { // Exclude the cache file itself
-        node.files.push({ id: f.getId(), name: f.getName(), size: formatSize(f.getSize()), mime: f.getMimeType() });
+      const fname = f.getName();
+      if (fname === fileName) continue; // Exclude the cache file itself
+      if (fname === 'password.json') {
+        // This folder is password-protected
+        try {
+          const pwData = JSON.parse(f.getBlob().getDataAsString());
+          node.protected = true;
+          node.password = pwData.password || pwData.pasword || '';
+        } catch(e) {
+          node.protected = true;
+          node.password = '';
+        }
+        continue; // Don't include password.json in the file listing
       }
+      node.files.push({ id: f.getId(), name: fname, size: formatSize(f.getSize()), mime: f.getMimeType() });
     }
     node.files.sort((a, b) => a.name.localeCompare(b.name));
     return node;
